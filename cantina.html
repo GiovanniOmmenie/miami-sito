@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cantina — Miami 4.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper:     #F4EFE6;
+      --paper-2:   #FAF7F0;
+      --ink:       #1A1612;
+      --ink-soft:  #6B5F52;
+      --gold:      #A38454;
+      --burgundy:  #6E2A30;
+      --rule:      #D9CFBE;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .back-link {
+      position: absolute;
+      left: 32px;
+      top: 64px;
+      font-size: 0.7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color .2s;
+      z-index: 5;
+    }
+    .back-link:hover { color: var(--gold); }
+    .back-link svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .page-header {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 64px 32px 40px;
+      text-align: center;
+      position: relative;
+    }
+    .page-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      letter-spacing: .15em;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 7vw, 4rem);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+    .page-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .page-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 26px auto 0;
+      color: var(--gold);
+    }
+    .ornament::before,
+    .ornament::after {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      opacity: .6;
+    }
+    .ornament svg {
+      width: 9px; height: 9px;
+      fill: currentColor;
+    }
+
+    .menu-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+    }
+
+    .section {
+      padding-top: 48px;
+      scroll-margin-top: 80px;
+    }
+    .section + .section .section-head {
+      border-top: 1px solid var(--rule);
+      padding-top: 48px;
+    }
+    .section + .section { padding-top: 0; }
+    .section-head {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 4vw, 1.9rem);
+      font-weight: 500;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .section-deck {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+    }
+    .section-ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 14px auto 0;
+      color: var(--gold);
+    }
+    .section-ornament::before,
+    .section-ornament::after {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+      opacity: .55;
+    }
+    .section-ornament svg {
+      width: 7px; height: 7px;
+      fill: currentColor;
+    }
+
+    /* ── WINE ITEM ── */
+    .wine {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .wine:last-child { border-bottom: none; }
+
+    .wine-head {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .wine-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+    }
+    .wine-dots {
+      flex: 1;
+      border-bottom: 1px dotted var(--rule);
+      transform: translateY(-4px);
+      min-width: 24px;
+    }
+    .wine-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--burgundy);
+      white-space: nowrap;
+    }
+    .wine-notes {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      line-height: 1.45;
+      padding-right: 60px;
+    }
+    .wine-meta {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 6px;
+    }
+    .wine-meta .dot {
+      margin: 0 8px;
+      color: var(--rule);
+    }
+
+    .page-footer {
+      border-top: 1px solid var(--rule);
+      padding: 28px 32px;
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    @media (max-width: 560px) {
+      .menu-wrap { padding: 0 24px 64px; }
+      .page-header { padding: 48px 24px 32px; }
+      .back-link { left: 24px; top: 48px; }
+      .wine-notes { padding-right: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <a class="back-link" href="index.html">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Home
+  </a>
+  <div class="page-num">— III —</div>
+  <h1 class="page-title"><em>Cantina</em></h1>
+  <p class="page-sub">Vini italiani e internazionali, prosecchi e champagne</p>
+  <div class="ornament">
+    <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+  </div>
+</header>
+
+<main class="menu-wrap">
+
+  <!-- VINI ROSSI -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Vini Rossi</h2>
+      <div class="section-deck">il carattere della terra</div>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Aglianico IGT Beneventano</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">18,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia, viola, tannico</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Le Foglie Aglianico Irpinia DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia, prugna, tabacco, spezie</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 13,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Piedirosso Campi Flegrei DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">viola, ciliegia, freschezza vulcanica</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Gragnano Penisola Sorrentina DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">frutti rossi, frizzante, leggero</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 10% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Rosso Piceno Sangiovese DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia, prugna, erbe aromatiche</div>
+      <div class="wine-meta">Marche <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Montepulciano d&rsquo;Abruzzo DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia, mora, tannino morbido</div>
+      <div class="wine-meta">Abruzzo <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Chianti DOCG</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia, viola, erbe aromatiche</div>
+      <div class="wine-meta">Toscana <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Nero d&rsquo;Avola Bio DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mora, prugna, spezie</div>
+      <div class="wine-meta">Sicilia <span class="dot">&middot;</span> 13,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Syrah Bio DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">pepe nero, mirtillo, affumicato</div>
+      <div class="wine-meta">Sicilia <span class="dot">&middot;</span> 13,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">La Desiderata Barbera DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia, prugna, acidit&agrave; vivace</div>
+      <div class="wine-meta">Lombardia <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Sangue di Giuda Oltrep&ograve; Pavese DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia, dolce, frizzante</div>
+      <div class="wine-meta">Lombardia <span class="dot">&middot;</span> 9,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Divinotello Rosso Trevenezie IGT</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">frutti rossi, morbido, fresco</div>
+      <div class="wine-meta">Friuli <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Merlot Friuli Grave DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">prugna, ciliegia, tannino morbido</div>
+      <div class="wine-meta">Friuli <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Duna Susumaniello IGP</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">frutti scuri, spezie, morbido</div>
+      <div class="wine-meta">Puglia <span class="dot">&middot;</span> 13,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Carmen&egrave;re Colchagua Valley</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">frutti scuri, peperone, pepe</div>
+      <div class="wine-meta">Cile <span class="dot">&middot;</span> 14% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Casavecchia Caos</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">24,00 &euro;</span>
+      </div>
+      <div class="wine-notes">frutti rossi, spezie, terra</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 13,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Primitivo Manduria DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">24,00 &euro;</span>
+      </div>
+      <div class="wine-notes">prugna matura, marmellata, vaniglia</div>
+      <div class="wine-meta">Puglia <span class="dot">&middot;</span> 14% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Gelso Nero</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">24,00 &euro;</span>
+      </div>
+      <div class="wine-notes">more, ciliegia, pepe</div>
+      <div class="wine-meta">Puglia <span class="dot">&middot;</span> 13,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Cannonau di Sardegna DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">24,00 &euro;</span>
+      </div>
+      <div class="wine-notes">frutti rossi, macchia mediterranea, spezie</div>
+      <div class="wine-meta">Sardegna <span class="dot">&middot;</span> 14% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Pinot Noir Bourgogne</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">24,00 &euro;</span>
+      </div>
+      <div class="wine-notes">lampone, ciliegia, terra</div>
+      <div class="wine-meta">Borgogna <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Per&rsquo;e Palummo Ischia DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">28,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia, erbe mediterranee, vulcanico</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Nebbiolo</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">30,00 &euro;</span>
+      </div>
+      <div class="wine-notes">rosa, ciliegia, catrame</div>
+      <div class="wine-meta">Piemonte <span class="dot">&middot;</span> 13,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Pinotage Rouge</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">35,00 &euro;</span>
+      </div>
+      <div class="wine-notes">more, affumicato, spezie</div>
+      <div class="wine-meta">Sud Africa <span class="dot">&middot;</span> 14% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Rosso di Montalcino DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">35,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia, prugna, note di rovere</div>
+      <div class="wine-meta">Toscana <span class="dot">&middot;</span> 13,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Taurasi DOCG 2018</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">49,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia matura, tabacco, cuoio, spezie</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 14% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Roveri 12</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">50,00 &euro;</span>
+      </div>
+      <div class="wine-notes">frutti scuri, vaniglia, eleganza</div>
+      <div class="wine-meta">Abruzzo <span class="dot">&middot;</span> 14% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Brunello di Montalcino</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">60,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia, cuoio, tabacco, rovere</div>
+      <div class="wine-meta">Toscana <span class="dot">&middot;</span> 14% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Duna Susumaniello</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">60,00 &euro;</span>
+      </div>
+      <div class="wine-notes">ciliegia, prugna, spezie, eleganza</div>
+      <div class="wine-meta">Puglia <span class="dot">&middot;</span> 14% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Barolo DOCG</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">60,00 &euro;</span>
+      </div>
+      <div class="wine-notes">rosa, catrame, ciliegia, cuoio</div>
+      <div class="wine-meta">Piemonte <span class="dot">&middot;</span> 14% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Amarone della Valpolicella DOCG</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">60,00 &euro;</span>
+      </div>
+      <div class="wine-notes">uva passa, ciliegia, cioccolato, spezie</div>
+      <div class="wine-meta">Veneto <span class="dot">&middot;</span> Montresor <span class="dot">&middot;</span> 15,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Amarone della Valpolicella DOCG</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">60,00 &euro;</span>
+      </div>
+      <div class="wine-notes">frutti maturi, cioccolato, cuoio</div>
+      <div class="wine-meta">Veneto <span class="dot">&middot;</span> Cantine di Ora <span class="dot">&middot;</span> 15% vol</div>
+    </div>
+  </section>
+
+  <!-- VINI BIANCHI -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Vini Bianchi</h2>
+      <div class="section-deck">freschezza e mineralit&agrave;</div>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Falanghina IGT Beneventano</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">18,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mela verde, agrumi, fiori bianchi</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">I Ponti Falanghina DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mela, agrumi, freschezza</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">I Venti Coda di Volpe DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mela, miele, frutta secca</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Falanghina Campi Flegrei DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">agrumi, minerale, salino</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Verdicchio dei Castelli di Jesi DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mela verde, mandorla, agrumi</div>
+      <div class="wine-meta">Marche <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Passerina Terre d&rsquo;Abruzzo IGT</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">pesca, fiori bianchi, agrumi</div>
+      <div class="wine-meta">Abruzzo <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Pecorino Terre di Chieti IGT</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">agrumi, erbe aromatiche, minerale</div>
+      <div class="wine-meta">Abruzzo <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Toscana Bianco</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">agrumi, mela, fresco</div>
+      <div class="wine-meta">Toscana <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Tom Tit Sauvignon Blanc</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">passion fruit, uva spina, erba tagliata</div>
+      <div class="wine-meta">Nuova Zelanda <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Sauvignon Blanc Leyda Reserva</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">tropicale, erbe, agrumi</div>
+      <div class="wine-meta">Cile <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">I Tufi Greco di Tufo DOCG</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">24,00 &euro;</span>
+      </div>
+      <div class="wine-notes">pesca, agrumi, mandorla, minerale</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Le Pietre Fiano di Avellino DOCG</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">24,00 &euro;</span>
+      </div>
+      <div class="wine-notes">pera, miele, mandorla tostata</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Biancolella DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">24,00 &euro;</span>
+      </div>
+      <div class="wine-notes">agrumi, sale, minerale vulcanico</div>
+      <div class="wine-meta">Ischia, Campania <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Vermentino di Gallura DOCG</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">24,00 &euro;</span>
+      </div>
+      <div class="wine-notes">agrumi, mare, pesca</div>
+      <div class="wine-meta">Sardegna <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">M&uuml;ller Thurgau IGP</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">24,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mela, salvia, agrumi</div>
+      <div class="wine-meta">Trentino <span class="dot">&middot;</span> 12% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Chardonnay Bourgogne</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">24,00 &euro;</span>
+      </div>
+      <div class="wine-notes">burro, mela, vaniglia</div>
+      <div class="wine-meta">Borgogna <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Pallagrello Bianco Fiore Clastico</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">28,00 &euro;</span>
+      </div>
+      <div class="wine-notes">frutta tropicale, agrumi, minerale</div>
+      <div class="wine-meta">Campania <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Chenin Blanc</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">30,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mela, miele, frutta tropicale</div>
+      <div class="wine-meta">Sud Africa <span class="dot">&middot;</span> 13% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Gew&uuml;rztraminer Alto Adige DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">30,00 &euro;</span>
+      </div>
+      <div class="wine-notes">litchi, rosa, frutta esotica</div>
+      <div class="wine-meta">Alto Adige <span class="dot">&middot;</span> 13,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Arneis &ldquo;Blang&egrave;&rdquo;</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">45,00 &euro;</span>
+      </div>
+      <div class="wine-notes">fiori bianchi, pesca, mandorla</div>
+      <div class="wine-meta">Piemonte <span class="dot">&middot;</span> Ceretto <span class="dot">&middot;</span> 12,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Passito Luna Storta</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">3,00 &euro;</span>
+      </div>
+      <div class="wine-notes">vino dolce, uva passa, miele</div>
+      <div class="wine-meta">Montelvini <span class="dot">&middot;</span> al calice</div>
+    </div>
+  </section>
+
+  <!-- BOLLICINE -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Bollicine</h2>
+      <div class="section-deck">prosecchi e champagne</div>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Petnat Chardonnay Frizzante IGT</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">22,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mela, lievito, naturale</div>
+      <div class="wine-meta">Venezia Giulia <span class="dot">&middot;</span> 12% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Aquarius Blanc de Blancs</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">25,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mela verde, agrumi, fresco</div>
+      <div class="wine-meta">Valdo <span class="dot">&middot;</span> Veneto <span class="dot">&middot;</span> 11,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Aquarius Ros&egrave;</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">25,00 &euro;</span>
+      </div>
+      <div class="wine-notes">fragola, frutti rossi, floreale</div>
+      <div class="wine-meta">Valdo <span class="dot">&middot;</span> Veneto <span class="dot">&middot;</span> 11,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Origine Fluo Extra Dry</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">25,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mela, agrumi, vivace</div>
+      <div class="wine-meta">Valdo <span class="dot">&middot;</span> Veneto <span class="dot">&middot;</span> 11% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Ice Blanc de Blancs</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">30,00 &euro;</span>
+      </div>
+      <div class="wine-notes">agrumi, fresco, da servire con ghiaccio</div>
+      <div class="wine-meta">Valdo <span class="dot">&middot;</span> Veneto <span class="dot">&middot;</span> 11% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Prosecco Treviso DOC</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">30,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mela, pera, fresco</div>
+      <div class="wine-meta">Valdo <span class="dot">&middot;</span> Veneto <span class="dot">&middot;</span> 11% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Cuv&eacute;e 1926 Prosecco Superiore DOCG</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">35,00 &euro;</span>
+      </div>
+      <div class="wine-notes">pera, fiori, brioche</div>
+      <div class="wine-meta">Valdo <span class="dot">&middot;</span> Veneto <span class="dot">&middot;</span> 11,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Boj Prosecco Superiore DOCG</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">35,00 &euro;</span>
+      </div>
+      <div class="wine-notes">mela, agrumi, mineralit&agrave;</div>
+      <div class="wine-meta">Valdo <span class="dot">&middot;</span> Veneto <span class="dot">&middot;</span> 11,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Cuv&eacute;e del Fondatore Prosecco Superiore DOCG 2021</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">40,00 &euro;</span>
+      </div>
+      <div class="wine-notes">pera, vaniglia, brioche</div>
+      <div class="wine-meta">Valdo <span class="dot">&middot;</span> Veneto <span class="dot">&middot;</span> 12% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Numero 10 Valdobbiadene Prosecco Superiore DOCG</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">40,00 &euro;</span>
+      </div>
+      <div class="wine-notes">pera, fiori bianchi, eleganza</div>
+      <div class="wine-meta">Valdo <span class="dot">&middot;</span> Veneto <span class="dot">&middot;</span> 11,5% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Champagne Reserve Exclusive Brut</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">80,00 &euro;</span>
+      </div>
+      <div class="wine-notes">agrumi, brioche, mandorla</div>
+      <div class="wine-meta">Nicolas Feuillatte <span class="dot">&middot;</span> Champagne <span class="dot">&middot;</span> 12% vol</div>
+    </div>
+
+    <div class="wine">
+      <div class="wine-head">
+        <span class="wine-name">Champagne Reserve Exclusive Ros&egrave;</span>
+        <span class="wine-dots"></span>
+        <span class="wine-price">80,00 &euro;</span>
+      </div>
+      <div class="wine-notes">fragola, lampone, brioche</div>
+      <div class="wine-meta">Nicolas Feuillatte <span class="dot">&middot;</span> Champagne <span class="dot">&middot;</span> 12% vol</div>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>

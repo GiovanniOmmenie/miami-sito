@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cucina — Miami 4.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper:     #F4EFE6;
+      --paper-2:   #FAF7F0;
+      --ink:       #1A1612;
+      --ink-soft:  #6B5F52;
+      --gold:      #A38454;
+      --burgundy:  #6E2A30;
+      --rule:      #D9CFBE;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── BACK LINK (absolute, aligned with page-num) ── */
+    .back-link {
+      position: absolute;
+      left: 32px;
+      top: 64px;
+      font-size: 0.7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color .2s;
+      z-index: 5;
+    }
+    .back-link:hover { color: var(--gold); }
+    .back-link svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 64px 32px 40px;
+      text-align: center;
+      position: relative;
+    }
+    .page-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      letter-spacing: .15em;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 7vw, 4rem);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+    .page-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .page-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 26px auto 0;
+      color: var(--gold);
+    }
+    .ornament::before,
+    .ornament::after {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      opacity: .6;
+    }
+    .ornament svg {
+      width: 9px; height: 9px;
+      fill: currentColor;
+    }
+
+    /* ── MENU WRAP ── */
+    .menu-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      padding-top: 48px;
+      scroll-margin-top: 80px;
+    }
+    .section-head {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 4vw, 1.9rem);
+      font-weight: 500;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .section-deck {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+    }
+    .section-ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 14px auto 0;
+      color: var(--gold);
+    }
+    .section-ornament::before,
+    .section-ornament::after {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+      opacity: .55;
+    }
+    .section-ornament svg {
+      width: 7px; height: 7px;
+      fill: currentColor;
+    }
+
+    /* ── ITEM ── */
+    .item {
+      padding: 14px 0;
+    }
+    .item-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .item-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+    }
+    .item-dots {
+      flex: 1;
+      border-bottom: 1px dotted var(--rule);
+      transform: translateY(-4px);
+      min-width: 24px;
+    }
+    .item-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--burgundy);
+      white-space: nowrap;
+    }
+    .item-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      font-style: italic;
+      line-height: 1.55;
+      margin-top: 4px;
+      padding-right: 60px;
+    }
+
+    /* ── PIECES NOTE ── */
+    .pieces {
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-size: 0.7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-left: 8px;
+    }
+
+    /* ── DIVIDER ── */
+    .section + .section .section-head {
+      border-top: 1px solid var(--rule);
+      padding-top: 48px;
+    }
+    .section + .section {
+      padding-top: 0;
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      border-top: 1px solid var(--rule);
+      padding: 28px 32px;
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    @media (max-width: 560px) {
+      .menu-wrap { padding: 0 24px 64px; }
+      .page-header { padding: 48px 24px 32px; }
+      .back-link { left: 24px; top: 48px; }
+      .item-desc { padding-right: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <a class="back-link" href="index.html">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Home
+  </a>
+  <div class="page-num">— I —</div>
+  <h1 class="page-title"><em>Cucina</em></h1>
+  <p class="page-sub">&Agrave; la carte &mdash; selezione di piatti del nostro restaurant</p>
+  <div class="ornament">
+    <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+  </div>
+</header>
+
+<!-- ── MENU ── -->
+<main class="menu-wrap">
+
+  <!-- ANTIPASTI -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Antipasti</h2>
+      <div class="section-deck">salumi, formaggi e fritti della casa</div>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Selezione di Salumi e Formaggi DOP</span>
+        <span class="item-dots"></span>
+        <span class="item-price">23,00 &euro;</span>
+      </div>
+      <div class="item-desc">Con focaccia, confettura di marmellata, miele e frutta essiccata</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Selezione di Salumi DOP</span>
+        <span class="item-dots"></span>
+        <span class="item-price">12,00 &euro;</span>
+      </div>
+      <div class="item-desc">Con focaccia calda e verdure alla griglia</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Selezione di Formaggi DOP</span>
+        <span class="item-dots"></span>
+        <span class="item-price">13,00 &euro;</span>
+      </div>
+      <div class="item-desc">Con focaccia calda, confetture di marmellata, miele e frutta essiccata</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Polpette Fritte con Fonduta di Taleggio<span class="pieces">5 pz</span></span>
+        <span class="item-dots"></span>
+        <span class="item-price">7,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Polpette con Mortadella e Fonduta<span class="pieces">5 pz</span></span>
+        <span class="item-dots"></span>
+        <span class="item-price">7,00 &euro;</span>
+      </div>
+      <div class="item-desc">Granella di pistacchio e fonduta di taleggio</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Polpette al Rag&ugrave; della Nonna<span class="pieces">5 pz</span></span>
+        <span class="item-dots"></span>
+        <span class="item-price">7,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Polpette di Melanzane Cacio e Pepe<span class="pieces">5 pz</span></span>
+        <span class="item-dots"></span>
+        <span class="item-price">7,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Burritos alla Messicana</span>
+        <span class="item-dots"></span>
+        <span class="item-price">8,00 &euro;</span>
+      </div>
+      <div class="item-desc">Ripieni al chili messicano</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Straccetti di Pollo ai Cornflakes</span>
+        <span class="item-dots"></span>
+        <span class="item-price">7,50 &euro;</span>
+      </div>
+      <div class="item-desc">Impanati ai cornflakes, salsa brandy e zafferano</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Bruschetta al Pomodoro<span class="pieces">3 pz</span></span>
+        <span class="item-dots"></span>
+        <span class="item-price">4,50 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Bruschetta Mix Fantasia dello Chef<span class="pieces">3 pz</span></span>
+        <span class="item-dots"></span>
+        <span class="item-price">5,00 &euro;</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FRITTI -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">I Nostri Fritti</h2>
+      <div class="section-deck">croccanti e generosi</div>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Magnum di Pasta e Patate</span>
+        <span class="item-dots"></span>
+        <span class="item-price">4,00 &euro;</span>
+      </div>
+      <div class="item-desc">Con fonduta di taleggio</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Patatine Classiche</span>
+        <span class="item-dots"></span>
+        <span class="item-price">4,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Patatine e W&uuml;rstel</span>
+        <span class="item-dots"></span>
+        <span class="item-price">5,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Patatine Salsiccia &amp; Taleggio</span>
+        <span class="item-dots"></span>
+        <span class="item-price">7,00 &euro;</span>
+      </div>
+      <div class="item-desc">Salsiccia sbriciolata e fonduta di taleggio</div>
+    </div>
+  </section>
+
+  <!-- PANINI -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Panini</h2>
+      <div class="section-deck">i nostri bun gourmet</div>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Lincoln Road</span>
+        <span class="item-dots"></span>
+        <span class="item-price">10,00 &euro;</span>
+      </div>
+      <div class="item-desc">Straccetti di pollo, maionese al blue cheese, emmental, mela verde caramellata, patatine</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Little Havana</span>
+        <span class="item-dots"></span>
+        <span class="item-price">10,00 &euro;</span>
+      </div>
+      <div class="item-desc">Hamburger di scottona, provola di Agerola, cipolla caramellata, prosciutto crudo, patatine</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">South Beach</span>
+        <span class="item-dots"></span>
+        <span class="item-price">10,00 &euro;</span>
+      </div>
+      <div class="item-desc">Hamburger di scottona, parmigiana, patatine</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Miami Beach</span>
+        <span class="item-dots"></span>
+        <span class="item-price">10,00 &euro;</span>
+      </div>
+      <div class="item-desc">Hamburger di scottona, mortadella, stracciata di bufala affumicata, granella di pistacchio, patatine</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Calle 8</span>
+        <span class="item-dots"></span>
+        <span class="item-price">10,00 &euro;</span>
+      </div>
+      <div class="item-desc">Porchetta, provola, melanzana arrostita, rucola, patatine</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Florida</span>
+        <span class="item-dots"></span>
+        <span class="item-price">10,00 &euro;</span>
+      </div>
+      <div class="item-desc">Hamburger vegano, zucchine alla griglia, insalata, pomodoro, patatine</div>
+    </div>
+  </section>
+
+  <!-- CLUB SANDWICH -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Club Sandwich</h2>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Club Sandwich Miami</span>
+        <span class="item-dots"></span>
+        <span class="item-price">12,00 &euro;</span>
+      </div>
+      <div class="item-desc">Prosciutto cotto, pomodoro, petto di pollo, uovo a occhio di bue, emmental, salsa mayo</div>
+    </div>
+  </section>
+
+  <!-- INSALATE -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Insalate</h2>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Caprese Salad</span>
+        <span class="item-dots"></span>
+        <span class="item-price">10,00 &euro;</span>
+      </div>
+      <div class="item-desc">Misticanza, stracciata di bufala, pomodorini, grissini</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Caesar Salad</span>
+        <span class="item-dots"></span>
+        <span class="item-price">12,00 &euro;</span>
+      </div>
+      <div class="item-desc">Insalata di pollo alla griglia, scaglie di parmigiano, crostini di pane, salsa caesar</div>
+    </div>
+  </section>
+
+  <!-- CARNI -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">La Selezione di Carni</h2>
+      <div class="section-deck">tagli pregiati e cotture lente</div>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Picanha</span>
+        <span class="item-dots"></span>
+        <span class="item-price">22,00 &euro;</span>
+      </div>
+      <div class="item-desc">Con rucola, pomodorini, scaglie di grana</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Tagliata di Petto di Pollo</span>
+        <span class="item-dots"></span>
+        <span class="item-price">15,00 &euro;</span>
+      </div>
+      <div class="item-desc">Con rucola, pomodorini e scaglie di grana</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">T-Bone</span>
+        <span class="item-dots"></span>
+        <span class="item-price">5,00 &euro; /etto</span>
+      </div>
+      <div class="item-desc">Con patate al forno e verdure alla griglia</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Hamburger al Piatto</span>
+        <span class="item-dots"></span>
+        <span class="item-price">12,00 &euro;</span>
+      </div>
+      <div class="item-desc">Con misticanza e patate</div>
+    </div>
+  </section>
+
+  <!-- TAGLIERI CALDI -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">I Nostri Taglieri Caldi</h2>
+      <div class="section-deck">minimo 2 persone</div>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Arrosticini di Black Angus</span>
+        <span class="item-dots"></span>
+        <span class="item-price">29,00 &euro;</span>
+      </div>
+      <div class="item-desc">Ribes, salsiccia, costolette di maiale, verdure alla griglia, patate al forno</div>
+    </div>
+  </section>
+
+  <!-- CONTORNI -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Contorni</h2>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Verdure alla Griglia</span>
+        <span class="item-dots"></span>
+        <span class="item-price">6,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Parmigiana di Melanzane</span>
+        <span class="item-dots"></span>
+        <span class="item-price">8,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Insalata Mista</span>
+        <span class="item-dots"></span>
+        <span class="item-price">4,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Patate al Forno</span>
+        <span class="item-dots"></span>
+        <span class="item-price">5,00 &euro;</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- KIDS -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Men&ugrave; Bambino</h2>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Men&ugrave; Kids</span>
+        <span class="item-dots"></span>
+        <span class="item-price">6,00 &euro;</span>
+      </div>
+      <div class="item-desc">Hamburger e patatine</div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Men&ugrave; Kid&rsquo;s Miami 4.0</span>
+        <span class="item-dots"></span>
+        <span class="item-price">8,00 &euro;</span>
+      </div>
+      <div class="item-desc">Hamburger, patatine e straccetti di pollo</div>
+    </div>
+  </section>
+
+  <!-- DESSERT -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Dessert</h2>
+      <div class="section-deck">le dolcezze della casa</div>
+      <div class="section-ornament">
+        <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Tortino al Cioccolato</span>
+        <span class="item-dots"></span>
+        <span class="item-price">6,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Tiramis&ugrave; Scomposto</span>
+        <span class="item-dots"></span>
+        <span class="item-price">6,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Cheesecake ai Frutti Rossi</span>
+        <span class="item-dots"></span>
+        <span class="item-price">6,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Cheesecake alla Nelly</span>
+        <span class="item-dots"></span>
+        <span class="item-price">6,00 &euro;</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-row">
+        <span class="item-name">Cheesecake al Pistacchio</span>
+        <span class="item-dots"></span>
+        <span class="item-price">6,00 &euro;</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>

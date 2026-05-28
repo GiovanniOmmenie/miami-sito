@@ -24,10 +24,10 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), midi=(), fullscreen=(self)
 
   # ─── Content Security Policy ───────────────────────────────────
-  # Only allow resources from self + Google Fonts (CSS + woff2).
+  # All resources served from self. Fonts are self-hosted (no Google CDN).
   # `frame-ancestors 'none'` doubles as anti-clickjacking.
   # `upgrade-insecure-requests` rewrites any accidental http:// to https://.
-  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
 
   # ─── Disable Legacy XSS Auditor ───────────────────────────────
   # Modern best practice: use CSP instead, the old auditor caused bugs.

@@ -1,0 +1,58 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║  CLOUDFLARE PAGES — SECURITY HEADERS                          ║
+# ║  Applied to all routes via Cloudflare Pages /_headers system  ║
+# ╚══════════════════════════════════════════════════════════════╝
+
+/*
+  # ─── HTTPS Enforcement ─────────────────────────────────────────
+  # Forces HTTPS for 2 years; signals readiness for HSTS preload list.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+
+  # ─── Anti MIME-sniffing ────────────────────────────────────────
+  X-Content-Type-Options: nosniff
+
+  # ─── Anti Clickjacking ─────────────────────────────────────────
+  # Nobody can embed our pages in an iframe.
+  X-Frame-Options: DENY
+
+  # ─── Referrer Privacy ──────────────────────────────────────────
+  # External sites only see the origin, not the full URL.
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # ─── Browser API Lockdown ──────────────────────────────────────
+  # Disable APIs we never use (camera, mic, geolocation, etc.).
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), midi=(), fullscreen=(self)
+
+  # ─── Content Security Policy ───────────────────────────────────
+  # Only allow resources from self + Google Fonts (CSS + woff2).
+  # `frame-ancestors 'none'` doubles as anti-clickjacking.
+  # `upgrade-insecure-requests` rewrites any accidental http:// to https://.
+  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+
+  # ─── Disable Legacy XSS Auditor ───────────────────────────────
+  # Modern best practice: use CSP instead, the old auditor caused bugs.
+  X-XSS-Protection: 0
+
+  # ─── Cross-Origin Isolation ────────────────────────────────────
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+
+# ─── Cache rules ─────────────────────────────────────────────────
+# HTML always fresh, fonts/images cached aggressively.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.png
+  Cache-Control: public, max-age=2592000
+
+/*.jpg
+  Cache-Control: public, max-age=2592000
+
+/*.svg
+  Cache-Control: public, max-age=2592000

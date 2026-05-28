@@ -1,0 +1,16 @@
+# Claude Code local config (non deployare)
+.claude/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Temporary
+*.tmp
+*.bak
